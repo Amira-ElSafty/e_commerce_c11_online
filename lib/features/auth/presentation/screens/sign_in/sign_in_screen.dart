@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../core/resources/assets_manager.dart';
-import '../../../../core/resources/color_manager.dart';
-import '../../../../core/resources/font_manager.dart';
-import '../../../../core/resources/styles_manager.dart';
-import '../../../../core/resources/values_manager.dart';
-import '../../../../core/routes_manager/routes.dart';
-import '../../../../core/widget/custom_elevated_button.dart';
-import '../../../../core/widget/main_text_field.dart';
-import '../../../../core/widget/validators.dart';
+import '../../../../../core/resources/assets_manager.dart';
+import '../../../../../core/resources/color_manager.dart';
+import '../../../../../core/resources/font_manager.dart';
+import '../../../../../core/resources/styles_manager.dart';
+import '../../../../../core/resources/values_manager.dart';
+import '../../../../../core/routes_manager/routes.dart';
+import '../../../../../core/widget/custom_elevated_button.dart';
+import '../../../../../core/widget/main_text_field.dart';
+import '../../../../../core/widget/validators.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
