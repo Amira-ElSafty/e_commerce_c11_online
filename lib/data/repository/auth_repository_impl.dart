@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_e_commerce_c11_online/data/data_sources/remote_data_source/auth_remote_data_source.dart';
+import 'package:flutter_e_commerce_c11_online/domain/entities/LoginResponseEntity.dart';
 import 'package:flutter_e_commerce_c11_online/domain/entities/RegisterResponseEntity.dart';
 import 'package:flutter_e_commerce_c11_online/domain/failures.dart';
 import 'package:flutter_e_commerce_c11_online/domain/repository/auth_repository.dart';
@@ -16,6 +17,13 @@ class AuthRepositoryImpl implements AuthRepository {
       String email, String password, String rePassword, String phone) async {
     var either = await authRemoteDataSource.register(
         name, email, password, rePassword, phone);
+    return either.fold((error) => Left(error), (response) => Right(response));
+  }
+
+  @override
+  Future<Either<Failures, LoginResponseEntity>> login(
+      String email, String password) async {
+    var either = await authRemoteDataSource.login(email, password);
     return either.fold((error) => Left(error), (response) => Right(response));
   }
 }

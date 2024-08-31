@@ -1,90 +1,96 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/widgets/custom_brand_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_commerce_c11_online/core/resources/color_manager.dart';
+import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/cubit/home_tab_states.dart';
+import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/cubit/home_tab_view_model.dart';
 import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/widgets/custom_category_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/resources/assets_manager.dart';
-import 'widgets/custom_ads_widget.dart';
+
+import '../../../../di/di.dart';
+import 'widgets/announcement_widget.dart';
 import 'widgets/custom_section_bar.dart';
 
-class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
+class HomeTab extends StatelessWidget {
+  HomeTabViewModel viewModel = getIt<HomeTabViewModel>();
 
   @override
-  State<HomeTab> createState() => _HomeTabState();
-}
-
-class _HomeTabState extends State<HomeTab> {
-  int _currentIndex = 0;
-  late Timer _timer;
-
-  final List<String> adsImages = [
-    ImageAssets.carouselSlider1,
-    ImageAssets.carouselSlider2,
-    ImageAssets.carouselSlider3,
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _startImageSwitching();
-  }
-
-  void _startImageSwitching() {
-    _timer = Timer.periodic(const Duration(milliseconds: 2500), (Timer timer) {
-      setState(() {
-        _currentIndex = (_currentIndex + 1) % adsImages.length;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          CustomAdsWidget(
-            adsImages: adsImages,
-            currentIndex: _currentIndex,
-            timer: _timer,
-          ),
-          Column(
+    return BlocBuilder<HomeTabViewModel, HomeTabStates>(
+      bloc: viewModel..getAllCategories()..getAllBrands(),
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Column(
             children: [
-              CustomSectionBar(sectionNname: 'Categories', function: () {}),
+              AnnouncementWidget(),
               SizedBox(
-                height: 270.h,
-                child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return const CustomCategoryWidget();
-                  },
-                  itemCount: 20,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                ),
+                height: 20.h,
               ),
+              CustomSectionBar(sectionNname: 'Categories', function: () {}),
+              // viewModel.categoriesList.isEmpty?
+              // Center(
+              //   child: CircularProgressIndicator(
+              //     color: ColorManager.primaryDark,
+              //   ),
+              // ):
+              // SizedBox(
+              //   height: 270.h,
+              //   child: GridView.builder(
+              //     scrollDirection: Axis.horizontal,
+              //     itemBuilder: (context, index) {
+              //       return const CustomCategoryWidget();
+              //     },
+              //     itemCount: 20,
+              //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //       crossAxisCount: 2,
+              //     ),
+              //   ),
+              // )
+              state is HomeCategoriesSuccessState
+                  ? SizedBox(
+                      height: 270.h,
+                      child: GridView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return CustomCategoryOrBrandWidget(
+                            category: viewModel.categoriesList[index],
+                          );
+                        },
+                        itemCount: viewModel.categoriesList.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(
+                        color: ColorManager.primaryDark,
+                      ),
+                    ),
               SizedBox(height: 12.h),
               CustomSectionBar(sectionNname: 'Brands', function: () {}),
-              SizedBox(
-                height: 270.h,
-                child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return const CustomBrandWidget();
-                  },
-                  itemCount: 20,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                ),
-              ),
+              state is HomeCategoriesLoadingState
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: ColorManager.primaryDark,
+                      ),
+                    )
+                  : SizedBox(
+                      height: 270.h,
+                      child: GridView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return CustomCategoryOrBrandWidget(
+                              category: viewModel.brandsList[index]);
+                        },
+                        itemCount: viewModel.brandsList.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                      ),
+                    ),
               // CustomSectionBar(
               //   sectionNname: 'Most Selling Products',
               //   function: () {},
@@ -109,11 +115,10 @@ class _HomeTabState extends State<HomeTab> {
               //     ),
               //   ),
               // ),
-              SizedBox(height: 12.h),
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }
