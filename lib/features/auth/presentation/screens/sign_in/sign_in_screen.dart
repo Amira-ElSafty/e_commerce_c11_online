@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_commerce_c11_online/core/widget/dialog_utils.dart';
+import 'package:flutter_e_commerce_c11_online/core/widget/shared_preference_utils.dart';
 import 'package:flutter_e_commerce_c11_online/di/di.dart';
 import 'package:flutter_e_commerce_c11_online/features/auth/presentation/screens/sign_in/cubit/sign_in_states.dart';
 import 'package:flutter_e_commerce_c11_online/features/auth/presentation/screens/sign_in/cubit/sign_in_view_model.dart';
@@ -34,9 +35,10 @@ class SignInScreen extends StatelessWidget {
           DialogUtils.hideLoading(context);
           DialogUtils.showMessage(context: context,
               message: 'Login Successfully',title: 'Success',posActionName: 'Ok',
-          posAction: (){
-            Navigator.of(context).pushReplacementNamed(Routes.mainRoute);
-          });
+       );
+          //todo: save token
+          SharedPreferenceUtils.saveData(key: 'token', value: state.responseEntity.token);
+          Navigator.of(context).pushReplacementNamed(Routes.mainRoute);
         }
       },
       child: Scaffold(

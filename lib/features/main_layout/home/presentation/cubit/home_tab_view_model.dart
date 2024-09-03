@@ -3,7 +3,10 @@ import 'package:flutter_e_commerce_c11_online/domain/entities/CategoryOrBrandRes
 import 'package:flutter_e_commerce_c11_online/domain/use_cases/get_all_brands_use_case.dart';
 import 'package:flutter_e_commerce_c11_online/domain/use_cases/get_all_categories_use_case.dart';
 import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/cubit/home_tab_states.dart';
+import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/home_tab.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../../../core/resources/assets_manager.dart';
 
 @injectable
 class HomeTabViewModel extends Cubit<HomeTabStates> {
@@ -16,6 +19,13 @@ class HomeTabViewModel extends Cubit<HomeTabStates> {
 
   List<CategoryOrBrandEntity> categoriesList = [];
   List<CategoryOrBrandEntity> brandsList = [];
+  List<String> sliderImages = [
+    ImageAssets.carouselSlider1,
+    ImageAssets.carouselSlider2,
+    ImageAssets.carouselSlider3
+  ];
+
+  static HomeTabViewModel get(context)=> BlocProvider.of(context);
 
   void getAllCategories() async {
     emit(HomeCategoriesLoadingState());
@@ -24,8 +34,9 @@ class HomeTabViewModel extends Cubit<HomeTabStates> {
       emit(HomeCategoriesErrorState(failures: error));
     }, (response) {
         categoriesList = response.data!;
-        emit(HomeCategoriesSuccessState(categoryResponseEntity: response));
-
+        if(brandsList.isNotEmpty) {
+          emit(HomeCategoriesSuccessState(categoryResponseEntity: response));
+        }
     });
   }
 
@@ -35,9 +46,11 @@ class HomeTabViewModel extends Cubit<HomeTabStates> {
     either.fold((error) {
       emit(HomeBrandsErrorState(failures: error));
     }, (response) {
-        brandsList = response.data!;
+      brandsList = response.data!;
+      if(categoriesList.isNotEmpty) {
         emit(HomeBrandsSuccessState(brandsResponseEntity: response));
       }
+    }
     );
   }
 }

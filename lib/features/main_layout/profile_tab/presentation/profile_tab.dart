@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_e_commerce_c11_online/core/routes_manager/routes.dart';
+import 'package:flutter_e_commerce_c11_online/core/widget/shared_preference_utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/resources/assets_manager.dart';
@@ -32,13 +34,26 @@ class ProfileTabState extends State<ProfileTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                SvgAssets.routeLogo,
-                height: AppSize.s40,
-                colorFilter: ColorFilter.mode(
-                  ColorManager.primary,
-                  BlendMode.srcIn,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset(
+                    SvgAssets.routeLogo,
+                    height: AppSize.s40,
+                    colorFilter: ColorFilter.mode(
+                      ColorManager.primary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  IconButton(icon: Icon(Icons.logout),onPressed: (){
+                    //todo: remove token
+                     SharedPreferenceUtils.removeData(key: 'token');
+                    //todo: navigate to login screen
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        Routes.signInRoute, (route) => false
+                    );
+                  },)
+                ],
               ),
               SizedBox(height: AppSize.s20.h),
               Text(

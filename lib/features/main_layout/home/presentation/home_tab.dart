@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_commerce_c11_online/core/resources/color_manager.dart';
+import 'package:flutter_e_commerce_c11_online/core/widget/dialog_utils.dart';
 import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/cubit/home_tab_states.dart';
 import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/cubit/home_tab_view_model.dart';
 import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/widgets/custom_category_widget.dart';
@@ -11,13 +12,16 @@ import 'widgets/announcement_widget.dart';
 import 'widgets/custom_section_bar.dart';
 
 class HomeTab extends StatelessWidget {
-  HomeTabViewModel viewModel = getIt<HomeTabViewModel>();
-
   @override
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeTabViewModel, HomeTabStates>(
-      bloc: viewModel..getAllCategories()..getAllBrands(),
+    return BlocConsumer<HomeTabViewModel, HomeTabStates>(
+      bloc: HomeTabViewModel.get(context)..getAllCategories()..getAllBrands(),
+      listener: (context,state){
+        if(state is HomeCategoriesErrorState){
+          DialogUtils.showMessage(context: context, message: state.failures.errorMessage);
+        }
+      },
       builder: (context, state) {
         return SingleChildScrollView(
           child: Column(
@@ -46,31 +50,31 @@ class HomeTab extends StatelessWidget {
               //     ),
               //   ),
               // )
-              state is HomeCategoriesSuccessState
-                  ? SizedBox(
-                      height: 270.h,
-                      child: GridView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return CustomCategoryOrBrandWidget(
-                            category: viewModel.categoriesList[index],
-                          );
-                        },
-                        itemCount: viewModel.categoriesList.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
-                      ),
-                    )
-                  : Center(
+              state is HomeCategoriesLoadingState
+                  ?Center(
                       child: CircularProgressIndicator(
                         color: ColorManager.primaryDark,
                       ),
-                    ),
+                    ):
+              SizedBox(
+                height: 270.h,
+                child: GridView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return CustomCategoryOrBrandWidget(
+                      category: HomeTabViewModel.get(context).categoriesList[index],
+                    );
+                  },
+                  itemCount: HomeTabViewModel.get(context).categoriesList.length,
+                  gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                ),
+              ),
               SizedBox(height: 12.h),
               CustomSectionBar(sectionNname: 'Brands', function: () {}),
-              state is HomeCategoriesLoadingState
+              state is HomeBrandsLoadingState
                   ? Center(
                       child: CircularProgressIndicator(
                         color: ColorManager.primaryDark,
@@ -82,9 +86,9 @@ class HomeTab extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return CustomCategoryOrBrandWidget(
-                              category: viewModel.brandsList[index]);
+                              category: HomeTabViewModel.get(context).brandsList[index]);
                         },
-                        itemCount: viewModel.brandsList.length,
+                        itemCount: HomeTabViewModel.get(context).brandsList.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,

@@ -26,14 +26,17 @@ import '../domain/repository/auth_repository.dart' as _i6;
 import '../domain/repository/home_repository.dart' as _i10;
 import '../domain/use_cases/get_all_brands_use_case.dart' as _i14;
 import '../domain/use_cases/get_all_categories_use_case.dart' as _i15;
+import '../domain/use_cases/get_all_products_use_case.dart' as _i16;
 import '../domain/use_cases/login_use_case.dart' as _i12;
 import '../domain/use_cases/register_use_case.dart' as _i13;
 import '../features/auth/presentation/screens/sign_in/cubit/sign_in_view_model.dart'
-    as _i17;
-import '../features/auth/presentation/screens/sign_up/cubit/sign_up_view_model.dart'
     as _i18;
+import '../features/auth/presentation/screens/sign_up/cubit/sign_up_view_model.dart'
+    as _i20;
 import '../features/main_layout/home/presentation/cubit/home_tab_view_model.dart'
-    as _i16;
+    as _i17;
+import '../features/products_screen/presentation/cubit/product_screen_view_model.dart'
+    as _i19;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -63,13 +66,17 @@ extension GetItInjectableX on _i1.GetIt {
         _i14.GetAllBrandsUseCase(homeRepository: gh<_i10.HomeRepository>()));
     gh.factory<_i15.GetAllCategoriesUseCase>(() => _i15.GetAllCategoriesUseCase(
         homeRepository: gh<_i10.HomeRepository>()));
-    gh.factory<_i16.HomeTabViewModel>(() => _i16.HomeTabViewModel(
+    gh.factory<_i16.GetAllProductUseCase>(() =>
+        _i16.GetAllProductUseCase(homeRepository: gh<_i10.HomeRepository>()));
+    gh.factory<_i17.HomeTabViewModel>(() => _i17.HomeTabViewModel(
           getAllCategoriesUseCase: gh<_i15.GetAllCategoriesUseCase>(),
           getAllBrandsUseCase: gh<_i14.GetAllBrandsUseCase>(),
         ));
-    gh.factory<_i17.LoginScreenViewModel>(
-        () => _i17.LoginScreenViewModel(loginUseCase: gh<_i12.LoginUseCase>()));
-    gh.factory<_i18.RegisterScreenViewModel>(() => _i18.RegisterScreenViewModel(
+    gh.factory<_i18.LoginScreenViewModel>(
+        () => _i18.LoginScreenViewModel(loginUseCase: gh<_i12.LoginUseCase>()));
+    gh.factory<_i19.ProductScreenViewModel>(() => _i19.ProductScreenViewModel(
+        getAllProductUseCase: gh<_i16.GetAllProductUseCase>()));
+    gh.factory<_i20.RegisterScreenViewModel>(() => _i20.RegisterScreenViewModel(
         registerUseCase: gh<_i13.RegisterUseCase>()));
     return this;
   }

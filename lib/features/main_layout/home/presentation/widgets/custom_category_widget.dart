@@ -14,8 +14,8 @@ class CustomCategoryOrBrandWidget extends StatelessWidget {
     return Column(
       children: [
         CachedNetworkImage(
-          height: 100,
-          width: 100,
+          height: 100.h,
+          width: 100.w,
           fit: BoxFit.cover,
           imageUrl: category.image??'',
           placeholder: (context, url) =>
@@ -36,21 +36,6 @@ class CustomCategoryOrBrandWidget extends StatelessWidget {
             );
           },
         ),
-
-        // ClipRRect(
-        //   borderRadius: BorderRadius.circular(100.r),
-        //   child: Container(
-        //     height: 100.h,
-        //     width: 100.w,
-        //     decoration: const BoxDecoration(
-        //       shape: BoxShape.circle,
-        //     ),
-        //     child: Image.asset(
-        //       ImageAssets.categoryHomeImage,
-        //       fit: BoxFit.cover,
-        //     ),
-        //   ),
-        // ),
         SizedBox(height: 8.h),
         Text(
           category.name??'',

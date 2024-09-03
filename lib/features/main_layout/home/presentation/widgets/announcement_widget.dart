@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_commerce_c11_online/core/resources/assets_manager.dart';
+import 'package:flutter_e_commerce_c11_online/features/main_layout/home/presentation/cubit/home_tab_view_model.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -8,11 +10,6 @@ import '../../../../../core/resources/color_manager.dart';
 import '../../../../../core/resources/values_manager.dart';
 
 class AnnouncementWidget extends StatelessWidget {
-  List<String> sliderImages = [
-    ImageAssets.carouselSlider1,
-    ImageAssets.carouselSlider2,
-    ImageAssets.carouselSlider3
-  ];
   @override
   Widget build(BuildContext context) {
     return ImageSlideshow(
@@ -22,7 +19,7 @@ class AnnouncementWidget extends StatelessWidget {
       indicatorBottomPadding: 20.h,
       autoPlayInterval: 3000,
       isLoop: true,
-      children: sliderImages
+      children: HomeTabViewModel.get(context).sliderImages
           .map((url) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Image.asset(
