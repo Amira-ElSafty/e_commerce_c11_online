@@ -12,9 +12,9 @@ class ProductScreenViewModel extends Cubit<ProductScreenStates> {
       : super(ProductInitialState());
 
   //todo: hold data - handle logic
-  List<ProductEntity> productsList = [];
+  List<ProductEntity>? productsList = [];
 
-  static ProductScreenViewModel get(context)=>BlocProvider.of(context);
+  static ProductScreenViewModel get(context) => BlocProvider.of(context);
 
   void getAllProducts() async {
     emit(ProductLoadingState());
@@ -22,7 +22,7 @@ class ProductScreenViewModel extends Cubit<ProductScreenStates> {
     either.fold((l) {
       emit(ProductErrorState(failures: l));
     }, (response) {
-      productsList = response.data ?? [] ;
+      productsList = response.data!;
       emit(ProductSuccessState(productResponseEntity: response));
     });
   }
