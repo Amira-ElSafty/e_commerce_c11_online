@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_e_commerce_c11_online/domain/entities/ProductResponseEntity.dart';
+import 'package:flutter_e_commerce_c11_online/features/products_screen/presentation/cubit/product_screen_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/resources/color_manager.dart';
@@ -146,6 +147,8 @@ class ProductItemWidget extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     //todo: add to cart
+                    ProductScreenViewModel.get(context)
+                        .addToCart(productEntity.id ?? '');
                   },
                   splashColor: Colors.transparent,
                   child: Icon(

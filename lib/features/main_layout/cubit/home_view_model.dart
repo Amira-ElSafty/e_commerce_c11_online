@@ -14,7 +14,7 @@ class HomeViewModel extends Cubit<HomeStates>{
   List<Widget> tabs = [
     HomeTab(),
     ProductsScreen(),
-    const FavouriteScreen(),
+    FavouriteScreen(),
     const ProfileTab(),
   ];
   void changeSelectedIndex(int selectedIndex) {

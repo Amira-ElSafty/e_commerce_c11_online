@@ -12,13 +12,13 @@ import '../widgets/product_label.dart';
 import '../widgets/product_rating.dart';
 
 class ProductDetails extends StatelessWidget {
-  // ProductEntity productEntity;
-  //
-  // ProductDetails({required this.productEntity});
+  ProductEntity productEntity;
+
+  ProductDetails({required this.productEntity});
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)!.settings.arguments as ProductEntity;
+    // var args = ModalRoute.of(context)!.settings.arguments as ProductEntity;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -62,7 +62,7 @@ class ProductDetails extends StatelessWidget {
                     indicatorBottomPadding: 20.h,
                     autoPlayInterval: 3000,
                     isLoop: true,
-                    children: args.images!
+                    children: productEntity.images!
                         .map((url) => Image.network(
                               url,
                               fit: BoxFit.cover,
@@ -76,18 +76,19 @@ class ProductDetails extends StatelessWidget {
               height: 24.h,
             ),
             ProductLabel(
-                productName: args.title ?? '',
-                productPrice: 'EGP ${args.price}'),
+                productName: productEntity.title ?? '',
+                productPrice: 'EGP ${productEntity.price}'),
             SizedBox(
               height: 16.h,
             ),
             ProductRating(
-                productBuyers: '${args.sold}',
-                productRating: '${args.ratingsAverage}'),
+                productBuyers: '${productEntity.sold}',
+                productRating: '${productEntity.ratingsAverage}'),
             SizedBox(
               height: 16.h,
             ),
-            ProductDescription(productDescription: args.description ?? ''),
+            ProductDescription(
+                productDescription: productEntity.description ?? ''),
             SizedBox(
               height: 48.h,
             ),
@@ -104,7 +105,7 @@ class ProductDetails extends StatelessWidget {
                     SizedBox(
                       height: 12.h,
                     ),
-                        Text('EGP ${args.price}',
+                        Text('EGP ${productEntity.price}',
                         style:
                             getMediumStyle(color: ColorManager.appBarTitleColor)
                                 .copyWith(fontSize: 18.sp))

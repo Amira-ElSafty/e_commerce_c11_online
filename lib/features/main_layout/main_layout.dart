@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_commerce_c11_online/features/main_layout/cubit/home_states.dart';
 import 'package:flutter_e_commerce_c11_online/features/main_layout/cubit/home_view_model.dart';
-import 'package:flutter_e_commerce_c11_online/features/main_layout/profile_tab/presentation/profile_tab.dart';
+
 import '../../core/resources/assets_manager.dart';
 import '../../core/resources/color_manager.dart';
-import '../../core/widget/home_screen_app_bar.dart';
-import 'categories/presentation/categories_tab.dart';
-import 'favourite/presentation/favourite_screen.dart';
-import 'home/presentation/home_tab.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -25,7 +21,6 @@ class _MainLayoutState extends State<MainLayout> {
       bloc: viewModel,
       builder: (context,state){
         return  Scaffold(
-          appBar: const HomeScreenAppBar(),
           extendBody: false,
           body: viewModel.tabs[viewModel.currentIndex],
           bottomNavigationBar: ClipRRect(
